@@ -86,7 +86,6 @@ class Exercise:
         obj = nested_obj
         if isinstance(obj, dict):
             obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
-            print(obj)
         elif isinstance(obj, list):
             if kays[0].isnumeric():
                 obj = self.get_nested_value_with_list_support(obj[int(keys[0])], keys[1:])
@@ -129,7 +128,7 @@ if __name__ == '__main__':
     #following are for exercise3 scenario 1
     # print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
     print(e.get_nested_value({"a": {"b": {"c": 1}}}, "a/b/c"))  # => 1
-    #print(e.get_nested_value({'a': 0, 'b': [1, 2]})) # => 2 is not working. needs to find soln.
+    print(e.get_nested_value({'a': 0, 'b': [1, 2]})) # => 2 is not working. needs to find soln.
 
     # # following are for exercise3 scenario 2
     # print(e.json_find(metadata_json, "ami-id"))
