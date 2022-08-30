@@ -27,7 +27,7 @@ import json
 
 class Exercise:
 #exercise 2
-    def iterate_url(url, uriList):
+    def iterate_url(self,url, uriList):
         output = {}
         for uri in uriList:
             new_url = url + uri
@@ -39,8 +39,8 @@ class Exercise:
             resp = r.text
             if uri[-1] == "/":
                 list_of_uris = r.text.splitlines()
-                output[uri[:-1]] = iterate_url(new_url, list_of_uris)
-            elif is_json(resp):
+                output[uri[:-1]] = self.iterate_url(new_url, list_of_uris)
+            elif self.is_json(resp):
                 output[uri] = json.loads(resp)
             else:
                 output[uri] = resp
@@ -67,27 +67,27 @@ class Exercise:
         #     # except KeyError:
         #     #     print("No such key found")
         try:
-            return (reduce(getitem, path.split("/"), obj))
+            return reduce(getitem, path.split("/"), obj)
         except (IndexError, KeyError):
             return None
 
     #exercise 3 scenario 2
-    def json_find(nestedDict, key):
-        obj = json.loads(nestedDict)
+    def json_find(self, nested_dict, key):
+        obj = json.loads(nested_dict)
         klist = []
-        values = find_key(obj, klist, key)
+        values = self.find_key(obj, klist, key)
         return values
 
-    def find_key(obj, klist, key):
-       if isinstance(obj, dict):
-           for k, v in obj.items():
-               if isinstance(v, (dict, list)):
-                   find_key(v, klist, key)
-               elif k == key:
-                   lkist.append(v)
-       elif isinstance(obj, list):
-           for item in obj:
-               find_key(item, klist, key)
+    def find_key(self, obj, klist, key):
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if isinstance(v, (dict, list)):
+                    self.find_key(v, klist, key)
+                elif k == key:
+                    klist.append(v)
+                elif isinstance(obj, list):
+                    for item in obj:
+                        self.find_key(item, klist, key)
         return klist
 
 
