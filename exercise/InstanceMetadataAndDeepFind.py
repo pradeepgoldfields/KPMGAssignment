@@ -88,7 +88,7 @@ class Exercise:
        elif isinstance(obj, list):
            for item in obj:
                find_key(item, klist, key)
-    return klist
+        return klist
 
 
 if __name__ == '__main__':
