@@ -122,16 +122,16 @@ if __name__ == '__main__':
     elementPath = ["meta-data/"] #if path like "meta-data/ami-id" is passed, function wold return a json with desired dict.
     metadata = e.iterate_url(base_url, elementPath)
     metadata_json = json.dumps(metadata,indent=4, sort_keys=True)
-    print(metadata_json) # would print o/p of exercise2
+    # print(metadata_json) # would print o/p of exercise2
 
     #following are for exercise3 scenario 1
     print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
     print(e.get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
     print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2 is not working. needs to find soln.
 
-    # following are for exercise3 scenario 2
-    print(e.json_find(metadata_json, "ami-id"))
-    print(e.json_find(json.dumps({"a": {"b": {"c": 1}}}), "c"))  # => 1
-    print(e.json_find(json.dumps([[[1, 2, 3], [10, 20, 30]]]), "2"))  # fail
-    print(e.json_find(json.dumps({'a': 0, 'b': [1, 2]}), "b"))  # => 1,2 failed needs fixing
-    print(e.json_find(json.dumps({'a': {'b': 1}, 'b': [[1, 2]]}), "b"))  # => 1,1,2 but returns 1, needs fixing too
+    # # following are for exercise3 scenario 2
+    # print(e.json_find(metadata_json, "ami-id"))
+    # print(e.json_find(json.dumps({"a": {"b": {"c": 1}}}), "c"))  # => 1
+    # print(e.json_find(json.dumps([[[1, 2, 3], [10, 20, 30]]]), "2"))  # fail
+    # print(e.json_find(json.dumps({'a': 0, 'b': [1, 2]}), "b"))  # => 1,2 failed needs fixing
+    # print(e.json_find(json.dumps({'a': {'b': 1}, 'b': [[1, 2]]}), "b"))  # => 1,1,2 but returns 1, needs fixing too
