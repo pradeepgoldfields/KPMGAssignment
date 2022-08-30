@@ -76,9 +76,9 @@ class Exercise:
     #         return None
 
 #exercise 3 scenario 1
-    def get_nested_value(self, nested_json, path):
+    def get_nested_value(self, nested_dict, path):
         keys = path.split("/")
-        nested_dict = json.loads(nested_json)
+        # nested_dict = json.loads(nested_json)
         val = self.get_nested_value_with_list_support(nested_dict, keys)
         return val
 
@@ -126,7 +126,7 @@ if __name__ == '__main__':
     # print(metadata_json) # would print o/p of exercise2
 
     #following are for exercise3 scenario 1
-    print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
+    # print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
     print(e.get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
     print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2 is not working. needs to find soln.
 
