@@ -86,11 +86,12 @@ class Exercise:
     def get_nested_value_with_list_support(self, nested_obj, keys):
         obj = nested_obj
         if isinstance(obj, dict):
-            obj = self.get_nested_value_with_list_support(keys[1:], obj[keys[0]])
+            obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
             print(obj)
-        # elif isinstance(obj, list):
-        #     print(keys[0])
-# obj = self.get_nested_value_with_list_support(keys[1:], obj[int(keys[0])])
+         elif isinstance(obj, list):
+             print(keys[0])
+             if kays[0].isnumeric():
+                 obj = self.get_nested_value_with_list_support(obj[int(keys[0])], keys[1:])
         else:
             return obj
         return obj
