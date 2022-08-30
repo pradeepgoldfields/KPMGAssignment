@@ -78,6 +78,7 @@ class Exercise:
 #exercise 3 scenario 1
     def get_nested_value(self, nested_dict, path):
         keys = path.split("/")
+        print(keys)
         # nested_dict = json.loads(nested_json)
         val = self.get_nested_value_with_list_support(nested_dict, keys)
         return val
