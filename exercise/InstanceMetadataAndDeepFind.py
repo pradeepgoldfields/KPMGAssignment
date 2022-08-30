@@ -26,6 +26,10 @@ import requests
 import json
 
 class Exercise:
+
+    def __init__(self):
+        pass
+
 #exercise 2
     def iterate_url(self,url, uriList):
         output = {}
@@ -56,20 +60,37 @@ class Exercise:
         return True
 
     #exercise 3 scenario 1
+    # def get_nested_value(self, nested_dict, path):
+    #     obj = json.loads(nested_dict)
+    #     #print(obj)
+    #     # keys = path.split("/")
+    #     # print(keys)
+    #     # print(type(obj))
+    #     # for i in range(0,len(keys)):
+    #     #     obj = nestedDict[keys[i]]
+    #     #     # except KeyError:
+    #     #     #     print("No such key found")
+    #     try:
+    #         return reduce(getitem, path.split("/"), obj)
+    #     except (IndexError, KeyError):
+    #         return None
+
+#exercise 3 scenario 1
     def get_nested_value(self, nested_dict, path):
-        obj = json.loads(nested_dict)
-        #print(obj)
-        # keys = path.split("/")
-        # print(keys)
-        # print(type(obj))
-        # for i in range(0,len(keys)):
-        #     obj = nestedDict[keys[i]]
-        #     # except KeyError:
-        #     #     print("No such key found")
-        try:
-            return reduce(getitem, path.split("/"), obj)
-        except (IndexError, KeyError):
-            return None
+        keys = path.split("/")
+        def get_nested_value_with_list_support(nested_obj, keys):
+            obj = nested_obj
+            if isinstance(obj, dict):
+                obj = get_nested_value_with_list_support(keys[1:], obj[keys[0]])
+            elif isinstance(obj, list):
+                if keys[0].isnumeric():
+                    obj = get_nested_value_with_list_support(keys[1:], obj[int(keys[0])])
+            else:
+                return obj
+            return obj
+        val = self.get_nested_value_with_list_support(nested_dict,keys)
+        return val
+
 
     #exercise 3 scenario 2
     def json_find(self, nested_dict, key):
@@ -105,7 +126,7 @@ if __name__ == '__main__':
     #following are for exercise3 scenario 1
     print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
     print(e.get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
-    #print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2 is not working. needs to find soln.
+    print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2 is not working. needs to find soln.
 
     # following are for exercise3 scenario 2
     print(e.json_find(metadata_json, "ami-id"))
