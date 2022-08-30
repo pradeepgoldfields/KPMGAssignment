@@ -88,7 +88,7 @@ class Exercise:
             obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
         elif isinstance(obj, list):
             for item in obj:
-                obj = self.get_nested_value_with_list_support(item, keys)
+                obj = self.get_nested_value_with_list_support(obj[1:], keys)
         else:
             return obj
         return obj
