@@ -88,8 +88,9 @@ class Exercise:
         if isinstance(obj, dict):
             obj = self.get_nested_value_with_list_support(keys[1:], obj[keys[0]])
         elif isinstance(obj, list):
-            if keys['0'].isnumeric():
-                obj = self.get_nested_value_with_list_support(keys[1:], obj[int(keys[0])])
+            if keys[0].isnumeric():
+                # obj = self.get_nested_value_with_list_support(keys[1:], obj[int(keys[0])])
+                print("its now not funny")
         else:
             return obj
         return obj
