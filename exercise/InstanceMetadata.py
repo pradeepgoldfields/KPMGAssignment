@@ -1,5 +1,5 @@
 # We need to write code that will query the meta data of an instance within aws and provide a json formatted output. The choice of language and implementation is up to you.
-# Since boto3 has no equavalent for boto.utils.get_instance_metadata(), we can write a py program that we assume will run within an ec2 instanace
+# Since boto3 has no equivalent for boto.utils.get_instance_metadata(), we can write a py program that we assume will run within an ec2 instanace
 # improvements:
 # 1. use imsdv2
 # 2. run it remotely using ssh or aws config remote exec.
@@ -7,7 +7,16 @@
 # after trying by myself fpr sometime, i have found a soln online. the trick is that the last elements of tree in the meta-data does not have / and the o/p of last element can be single item(text) or a json.
 #idea is to create a nested dict that can be easily converted to json
 
-#Merging exercise 2 and 3 because the o/p of exercise 2 is a good input for exercise 3.
+#Merging exercise 2 and 3 because the o/p of exercise 2 is a good input to showcase exercise 3.
+
+#exercise 3 can be divided into 2 scenarios based on type of i/p provided and data needed in realworld situations.
+#scenario 1 is when the key path is provided like a/b/c and when value of it is expected. ex: when we need the cost(c) of a book(b) in the library(a).
+#scenario 2 is when you need all the values for a key ex: in maps from a source to destination there might be n ways, if we need the durations of all n ways we can use scenario 2 soln. to get all the values of duration form a api response.
+
+#todo:
+#input validations of nested obj and keys
+#error handling and failing gracefully
+#unit tests can be made using assertequals and assertnotequals.
 
 # !/usr/bin/python3
 
@@ -45,7 +54,7 @@ def is_json(myjson):
         return False
     return True
 
-#exercise 3
+#exercise 3 scenario 1
 def get_nested_value(nestedDict, path):
     obj = json.loads(nestedDict)
     #print(obj)
@@ -61,37 +70,43 @@ def get_nested_value(nestedDict, path):
     except (IndexError, KeyError):
         return None
 
-# def json_extract(obj, key):
-#     """Recursively fetch values from nested JSON."""
-#     arr = []
-#
-#     def extract(obj, arr, key):
-#         """Recursively search for values of key in JSON tree."""
-#         if isinstance(obj, dict):
-#             for k, v in obj.items():
-#                 if isinstance(v, (dict, list)):
-#                     extract(v, arr, key)
-#                 elif k == key:
-#                     arr.append(v)
-#         elif isinstance(obj, list):
-#             for item in obj:
-#                 extract(item, arr, key)
-#         return arr
-#
-#     values = extract(obj, arr, key)
-#     return values
+#exercise 3 scenario 2
+def json_find(nestedDict, key):
+    obj = json.loads(nestedDict)
+    klist = []
+    values = find_key(obj, klist, key)
+    return values
+
+def find_key(obj, klist, key):
+   if isinstance(obj, dict):
+       for k, v in obj.items():
+           if isinstance(v, (dict, list)):
+               find_key(v, klist, key)
+           elif k == key:
+               lkist.append(v)
+   elif isinstance(obj, list):
+       for item in obj:
+           find_key(item, klist, key)
+   return klist
+
 
 if __name__ == '__main__':
     base_url = 'http://169.254.169.254/latest/'
     # input_string = input('Enter elements of a list separated by space ')
     # print("\n")
     # elementPath = input_string.split()
-    elementPath = ["meta-data/"]
+    elementPath = ["meta-data/"] #if path like "meta-data/ami-id" is passed, function wold return a json with desired dict.
     metadata = iterate_url(base_url, elementPath)
     metadata_json = json.dumps(metadata,indent=4, sort_keys=True)
-    respVal = get_nested_value(metadata_json, "meta-data/ami-id")
-    # print(get_nested_value(data={"a": {"b": {"c": 1}}}, keys=["a", "b", "c"]))  # => 1
-    # print(get_nested_value(data=[[[1, 2, 3], [10, 20, 30]]], keys=[0, 1, 2]))  # => 30
-    # print(get_nested_value(data={'a': 0, 'b': [[1, 2]]}, keys=['b', 0, 1]))  # => 2
-    # print(get_nested_value(data=some_sequence, keys=[]))  # => some_sequence
-    print(respVal)
+    print(metadata_json) # would print o/p of exercise2
+    #following are for exercise3 scenario 1
+    print(get_nested_value(metadata_json, "meta-data/ami-id"))
+    print(get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
+    print(get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2
+
+    # following are for exercise3 scenario 2
+    print(json_find(metadata_json, "ami-id"))
+    print(json_find(json.dumps({"a": {"b": {"c": 1}}}), "c"))  # => 1
+    print(json_find(json.dumps([[[1, 2, 3], [10, 20, 30]]]), "2"))  # fail
+    print(json_find(json.dumps({'a': 0, 'b': [1, 2]}), "b"))  # => 1,2 failed needs fixing
+    print(json_find(json.dumps({'a': {'b': 1}, 'b': [[1, 2]]}), "b"))  # => 1,1,2 but returns 1, needs fixing too
