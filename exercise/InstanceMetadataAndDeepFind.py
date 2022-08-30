@@ -78,7 +78,6 @@ class Exercise:
 #exercise 3 scenario 1
     def get_nested_value(self, nested_dict, path):
         keys = path.split("/")
-        print(keys)
         # nested_dict = json.loads(nested_json)
         val = self.get_nested_value_with_list_support(nested_dict, keys)
         return val
@@ -89,7 +88,6 @@ class Exercise:
             obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
             print(obj)
         elif isinstance(obj, list):
-            print(keys[0])
             if kays[0].isnumeric():
                 obj = self.get_nested_value_with_list_support(obj[int(keys[0])], keys[1:])
         else:
