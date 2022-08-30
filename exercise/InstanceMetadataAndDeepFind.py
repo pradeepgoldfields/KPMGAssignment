@@ -48,7 +48,7 @@ class Exercise:
 
 
 
-    def is_json(myjson):
+    def is_json(self,myjson):
         try:
             json.loads(myjson)
         except ValueError:
@@ -56,8 +56,8 @@ class Exercise:
         return True
 
     #exercise 3 scenario 1
-    def get_nested_value(nestedDict, path):
-        obj = json.loads(nestedDict)
+    def get_nested_value(self, nested_dict, path):
+        obj = json.loads(nested_dict)
         #print(obj)
         # keys = path.split("/")
         # print(keys)
