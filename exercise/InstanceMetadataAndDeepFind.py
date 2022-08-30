@@ -78,18 +78,19 @@ class Exercise:
 #exercise 3 scenario 1
     def get_nested_value(self, nested_dict, path):
         keys = path.split("/")
-        def get_nested_value_with_list_support(nested_obj, keys):
-            obj = nested_obj
-            if isinstance(obj, dict):
-                obj = get_nested_value_with_list_support(keys[1:], obj[keys[0]])
-            elif isinstance(obj, list):
-                if keys[0].isnumeric():
-                    obj = get_nested_value_with_list_support(keys[1:], obj[int(keys[0])])
-            else:
-                return obj
-            return obj
         val = self.get_nested_value_with_list_support(nested_dict,keys)
         return val
+
+    def get_nested_value_with_list_support(self, nested_obj, keys):
+        obj = nested_obj
+        if isinstance(obj, dict):
+            obj = get_nested_value_with_list_support(keys[1:], obj[keys[0]])
+        elif isinstance(obj, list):
+            if keys[0].isnumeric():
+                obj = get_nested_value_with_list_support(keys[1:], obj[int(keys[0])])
+        else:
+            return obj
+        return obj
 
 
     #exercise 3 scenario 2
