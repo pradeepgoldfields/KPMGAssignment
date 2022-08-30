@@ -1,10 +1,10 @@
 import unittest
-import InstanceMetadataAndDeepFind as ExerciseClass
+import DeepFind as ExerciseClass
 import json
 
 
 class Test(unittest.TestCase):
-    e = ExerciseClass.Exercise()
+    e = ExerciseClass.Exercise3()
     def test_0_get_nested_value(self):
         self.assertEqual(3, self.e.get_nested_value({'a': 0, 'b': [1, {"c":3}, 2]}, "b/c"))
 
