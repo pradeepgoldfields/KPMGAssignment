@@ -88,10 +88,10 @@ class Exercise:
         if isinstance(obj, dict):
             obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
             print(obj)
-         elif isinstance(obj, list):
-             print(keys[0])
-             if kays[0].isnumeric():
-                 obj = self.get_nested_value_with_list_support(obj[int(keys[0])], keys[1:])
+        elif isinstance(obj, list):
+            print(keys[0])
+            if kays[0].isnumeric():
+                obj = self.get_nested_value_with_list_support(obj[int(keys[0])], keys[1:])
         else:
             return obj
         return obj
