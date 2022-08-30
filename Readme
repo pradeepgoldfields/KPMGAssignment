@@ -6,3 +6,12 @@ prequesites:
 aws configure and setup default profile
 run terraform init, terraform plan and terraform apply
 after review run terraform destroy.
+
+
+todo:
+add asgs
+add rds
+add demo app
+add count to make subnet, ec2 for better scalability of code.
+parameterize
+add tfvar and if needed creds for db and git encrypt the tfvars
