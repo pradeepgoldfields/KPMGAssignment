@@ -105,7 +105,7 @@ if __name__ == '__main__':
     #following are for exercise3 scenario 1
     print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
     print(e.get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
-    print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2
+    #print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2 is not working. needs to find soln.
 
     # following are for exercise3 scenario 2
     print(e.json_find(metadata_json, "ami-id"))
