@@ -25,69 +25,70 @@ from operator import getitem
 import requests
 import json
 
+class Exercise:
 #exercise 2
-def iterate_url(url, uriList):
-    output = {}
-    for uri in uriList:
-        new_url = url + uri
+    def iterate_url(url, uriList):
+        output = {}
+        for uri in uriList:
+            new_url = url + uri
+            try:
+                r = requests.get(new_url)
+            except requests.exceptions.HTTPError as err:
+                exit(resp(err))
+                #raise SystemExit(err)
+            resp = r.text
+            if uri[-1] == "/":
+                list_of_uris = r.text.splitlines()
+                output[uri[:-1]] = iterate_url(new_url, list_of_uris)
+            elif is_json(resp):
+                output[uri] = json.loads(resp)
+            else:
+                output[uri] = resp
+        return output
+
+
+
+    def is_json(myjson):
         try:
-            r = requests.get(new_url)
-        except requests.exceptions.HTTPError as err:
-            exit(resp(err))
-            #raise SystemExit(err)
-        resp = r.text
-        if uri[-1] == "/":
-            list_of_uris = r.text.splitlines()
-            output[uri[:-1]] = iterate_url(new_url, list_of_uris)
-        elif is_json(resp):
-            output[uri] = json.loads(resp)
-        else:
-            output[uri] = resp
-    return output
+            json.loads(myjson)
+        except ValueError:
+            return False
+        return True
 
+    #exercise 3 scenario 1
+    def get_nested_value(nestedDict, path):
+        obj = json.loads(nestedDict)
+        #print(obj)
+        # keys = path.split("/")
+        # print(keys)
+        # print(type(obj))
+        # for i in range(0,len(keys)):
+        #     obj = nestedDict[keys[i]]
+        #     # except KeyError:
+        #     #     print("No such key found")
+        try:
+            return (reduce(getitem, path.split("/"), obj))
+        except (IndexError, KeyError):
+            return None
 
+    #exercise 3 scenario 2
+    def json_find(nestedDict, key):
+        obj = json.loads(nestedDict)
+        klist = []
+        values = find_key(obj, klist, key)
+        return values
 
-def is_json(myjson):
-    try:
-        json.loads(myjson)
-    except ValueError:
-        return False
-    return True
-
-#exercise 3 scenario 1
-def get_nested_value(nestedDict, path):
-    obj = json.loads(nestedDict)
-    #print(obj)
-    # keys = path.split("/")
-    # print(keys)
-    # print(type(obj))
-    # for i in range(0,len(keys)):
-    #     obj = nestedDict[keys[i]]
-    #     # except KeyError:
-    #     #     print("No such key found")
-    try:
-        return (reduce(getitem, path.split("/"), obj))
-    except (IndexError, KeyError):
-        return None
-
-#exercise 3 scenario 2
-def json_find(nestedDict, key):
-    obj = json.loads(nestedDict)
-    klist = []
-    values = find_key(obj, klist, key)
-    return values
-
-def find_key(obj, klist, key):
-   if isinstance(obj, dict):
-       for k, v in obj.items():
-           if isinstance(v, (dict, list)):
-               find_key(v, klist, key)
-           elif k == key:
-               lkist.append(v)
-   elif isinstance(obj, list):
-       for item in obj:
-           find_key(item, klist, key)
-   return klist
+    def find_key(obj, klist, key):
+       if isinstance(obj, dict):
+           for k, v in obj.items():
+               if isinstance(v, (dict, list)):
+                   find_key(v, klist, key)
+               elif k == key:
+                   lkist.append(v)
+       elif isinstance(obj, list):
+           for item in obj:
+               find_key(item, klist, key)
+    return klist
 
 
 if __name__ == '__main__':
@@ -95,18 +96,20 @@ if __name__ == '__main__':
     # input_string = input('Enter elements of a list separated by space ')
     # print("\n")
     # elementPath = input_string.split()
+    e = Exercise()
     elementPath = ["meta-data/"] #if path like "meta-data/ami-id" is passed, function wold return a json with desired dict.
-    metadata = iterate_url(base_url, elementPath)
+    metadata = e.iterate_url(base_url, elementPath)
     metadata_json = json.dumps(metadata,indent=4, sort_keys=True)
     print(metadata_json) # would print o/p of exercise2
+
     #following are for exercise3 scenario 1
-    print(get_nested_value(metadata_json, "meta-data/ami-id"))
-    print(get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
-    print(get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2
+    print(e.get_nested_value(metadata_json, "meta-data/ami-id"))
+    print(e.get_nested_value(json.dumps({"a": {"b": {"c": 1}}}), "a/b/c") ) # => 1
+    print(e.get_nested_value(json.dumps({'a': 0, 'b': [[1, 2]]}), "b/0/1"))  # => 2
 
     # following are for exercise3 scenario 2
-    print(json_find(metadata_json, "ami-id"))
-    print(json_find(json.dumps({"a": {"b": {"c": 1}}}), "c"))  # => 1
-    print(json_find(json.dumps([[[1, 2, 3], [10, 20, 30]]]), "2"))  # fail
-    print(json_find(json.dumps({'a': 0, 'b': [1, 2]}), "b"))  # => 1,2 failed needs fixing
-    print(json_find(json.dumps({'a': {'b': 1}, 'b': [[1, 2]]}), "b"))  # => 1,1,2 but returns 1, needs fixing too
+    print(e.json_find(metadata_json, "ami-id"))
+    print(e.json_find(json.dumps({"a": {"b": {"c": 1}}}), "c"))  # => 1
+    print(e.json_find(json.dumps([[[1, 2, 3], [10, 20, 30]]]), "2"))  # fail
+    print(e.json_find(json.dumps({'a': 0, 'b': [1, 2]}), "b"))  # => 1,2 failed needs fixing
+    print(e.json_find(json.dumps({'a': {'b': 1}, 'b': [[1, 2]]}), "b"))  # => 1,1,2 but returns 1, needs fixing too
