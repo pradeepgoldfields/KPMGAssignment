@@ -76,6 +76,7 @@ class Exercise3:
                             self.find_key(item, klist, key)
             except (NoSuchElementException, keyError) as ex:
                 print(ex)
+                return None
         return klist
 
 
