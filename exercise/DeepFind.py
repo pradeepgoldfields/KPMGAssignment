@@ -13,6 +13,7 @@ from functools import reduce
 from operator import getitem
 import requests
 import json
+import sys
 
 class Exercise3:
 
@@ -64,14 +65,18 @@ class Exercise3:
 
     def find_key(self, obj, klist, key):
         if isinstance(obj, dict):
-            for k, v in obj.items():
-                if isinstance(v, (dict, list)):
-                    self.find_key(v, klist, key)
-                elif k == key:
-                    klist.append(v)
-                elif isinstance(obj, list):
-                    for item in obj:
-                        self.find_key(item, klist, key)
+            try:
+                for k, v in obj.items():
+                    if isinstance(v, (dict, list)):
+                        self.find_key(v, klist, key)
+                    elif k == key:
+                        klist.append(v)
+                    elif isinstance(obj, list):
+                        for item in obj:
+                            self.find_key(item, klist, key)
+            except (NoSuchElementException, keyError) as ex:
+                print(ex)
+                sys.exit(0)
         return klist
 
 
