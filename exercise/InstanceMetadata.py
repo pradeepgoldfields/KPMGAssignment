@@ -14,13 +14,14 @@ from operator import getitem
 import requests
 import json
 
+
 class Exercise2:
 
     def __init__(self):
         pass
 
 #exercise 2
-    def iterate_url(self,url, uriList):
+    def iterate_url(self, url, uriList):
         output = {}
         for uri in uriList:
             new_url = url + uri
@@ -32,14 +33,15 @@ class Exercise2:
             resp = r.text
             if uri[-1] == "/":
                 list_of_uris = r.text.splitlines()
+# iterating edges and getting rid of /
                 output[uri[:-1]] = self.iterate_url(new_url, list_of_uris)
+# found node of type json?
             elif self.is_json(resp):
                 output[uri] = json.loads(resp)
+# found node of type string/number?
             else:
                 output[uri] = resp
         return output
-
-
 
     def is_json(self,myjson):
         try:
@@ -47,6 +49,7 @@ class Exercise2:
         except ValueError:
             return False
         return True
+
 
 if __name__ == '__main__':
     base_url = 'http://169.254.169.254/latest/'
