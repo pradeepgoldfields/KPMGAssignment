@@ -45,14 +45,17 @@ class Exercise3:
 
     def get_nested_value_with_list_support(self, nested_obj, keys):
         obj = nested_obj
-        if isinstance(obj, dict):
-            obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
-        elif isinstance(obj, list):
-            for item in obj:
-                if isinstance(item, dict):
-                    obj = self.get_nested_value_with_list_support(item, keys)
-        else:
-            return obj
+        try:
+            if isinstance(obj, dict):
+                obj = self.get_nested_value_with_list_support(obj[keys[0]], keys[1:])
+            elif isinstance(obj, list):
+                for item in obj:
+                    if isinstance(item, dict):
+                        obj = self.get_nested_value_with_list_support(item, keys)
+            else:
+                return obj
+        except KeyError as ex:
+            return None
         return obj
 
 
@@ -75,7 +78,6 @@ class Exercise3:
                         for item in obj:
                             self.find_key(item, klist, key)
             except KeyError as ex:
-                print(ex)
                 return None
         return klist
 
