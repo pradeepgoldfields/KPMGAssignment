@@ -74,7 +74,7 @@ class Exercise3:
                     elif isinstance(obj, list):
                         for item in obj:
                             self.find_key(item, klist, key)
-            except (NoSuchElementException, keyError) as ex:
+            except KeyError as ex:
                 print(ex)
                 return None
         return klist
