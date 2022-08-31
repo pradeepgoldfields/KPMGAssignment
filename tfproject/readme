@@ -1,5 +1,5 @@
 This is a simple representation of a 3-tier, the best ways for prod environment are not EC2 any more as we have more scalable, reliable and resiliant solutions like EKS, ECS, serverless(lambda, CDN, API gateway,SQS or MSK and dynamodb) etc.
-I have gone with EC2 because of time constraint, cost and simplicity for the demo app which will never run on prod.
+I have gone with EC2 because of time constraint and simplicity for the demo app which is not intended for prod.
 given time and resources, i prefer EKS or serverless depending on the nature of the microservices that we would run.
 
 prequesites:
