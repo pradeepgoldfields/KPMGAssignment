@@ -38,7 +38,7 @@ class Exercise2:
 # found node of type json?
             elif self.is_json(resp):
                 output[uri] = json.loads(resp)
-# found node of type string/number?
+# found node of type string/number/None?
             else:
                 output[uri] = resp
         return output
